@@ -1,4 +1,4 @@
-class SinhVen:
+class SinhVien:
     def __init__(self, id, name, sex, major, diemTB):
         self._id = id
         self._name = name
