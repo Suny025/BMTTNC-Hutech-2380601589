@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Thực hành an toàn thông tin nâng cao</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <style>
+        body{
+            background: linear-gradient(135deg,#eaf4ff,#f8f9fa);
+            min-height:100vh;
+        }
+
+        .header-box{
+            background:white;
+            margin-top:30px;
+            padding:35px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-box img{
+            transition:0.3s;
+        }
+
+        .header-box img:hover{
+            transform:scale(1.05);
+        }
+
+        .card-link{
+            text-decoration:none;
+            color:white;
+        }
+
+        .card-link:hover{
+            text-decoration:none;
+            color:white;
+        }
+
+        .cipher-card{
+            border-radius:20px;
+            padding:35px;
+            text-align:center;
+            margin-top:25px;
+            transition:0.3s;
+            height:150px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .cipher-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .caesar{
+            background:#0d6efd;
+            border-left:8px solid #084298;
+        }
+
+        .playfair{
+            background:#198754;
+            border-left:8px solid #0f5132;
+        }
+
+        .railfence{
+            background:#fd7e14;
+            border-left:8px solid #b45309;
+        }
+
+        .vigenere{
+            background:#dc3545;
+            border-left:8px solid #842029;
+        }
+
+        .cipher-card h5{
+            font-weight:bold;
+            font-size:24px;
+            margin:0;
+            letter-spacing:1px;
+        }
+
+        h4{
+            font-weight:bold;
+            margin-top:20px;
+        }
+
+        h5.text-muted{
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header-box">
+
+        <img src="https://file1.hutech.edu.vn/file/editor/homepage/stories/hinh34/logo%20CMYK-01.png"
+             alt="HUTECH"
+             width="220">
+
+        <h4>
+            BÀI THỰC HÀNH BẢO MẬT THÔNG TIN NÂNG CAO
+        </h4>
+
+        <h5 class="text-muted">
+            PHẠM HỒNG NHUNG - 2380601589
+        </h5>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <a href="caesar" class="card-link">
+                <div class="cipher-card caesar">
+                    <h5>CAESAR CIPHER</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6">
+            <a href="playfair" class="card-link">
+                <div class="cipher-card playfair">
+                    <h5>PLAYFAIR CIPHER</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6">
+            <a href="railfence" class="card-link">
+                <div class="cipher-card railfence">
+                    <h5>RAIL FENCE CIPHER</h5>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6">
+            <a href="vigenere" class="card-link">
+                <div class="cipher-card vigenere">
+                    <h5>VIGENERE CIPHER</h5>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
