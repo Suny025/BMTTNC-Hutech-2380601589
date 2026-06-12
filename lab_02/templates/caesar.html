@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Caesar Cipher</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
     <style>
@@ -51,100 +52,102 @@
         }
     </style>
 </head>
+
 <body>
 
-    <div class="container">
-        <table class="table">
+<div class="container">
+    <table class="table">
 
-            <tr>
-                <td class="title">
-                    CAESAR CIPHER
-                </td>
-            </tr>
+        <!-- TITLE -->
+        <tr>
+            <td class="title">CAESAR CIPHER</td>
+        </tr>
 
-            <tr>
-                <td class="section-title">
-                    ENCRYPTION
-                </td>
-            </tr>
+        <!-- ENCRYPT -->
+        <tr>
+            <td class="section-title">ENCRYPTION</td>
+        </tr>
 
-            <tr>
-                <td>
-                    <form method="POST" action="/caesar/encrypt">
+        <tr>
+            <td>
+                <form method="POST" action="/caesar/encrypt">
 
-                        <div class="mb-3">
-                            <label class="form-label">Plain text:</label>
-                            <input type="text"
-                                   class="form-control"
-                                   name="inputPlainText"
-                                   placeholder="Input Plain Text"
-                                   pattern="[A-Za-z ]+"
-                                   title="Chỉ được nhập chữ cái và khoảng trắng"
-                                   required
-                                   autofocus>
-                        </div>
+                    <div class="mb-3">
+                        <label>Plain text:</label>
+                        <input type="text"
+                               class="form-control"
+                               name="inputPlainText"
+                               placeholder="Input Plain Text"
+                               pattern="^[A-Za-z ]+$"
+                               title="Chỉ nhập chữ cái A-Z và khoảng trắng"
+                               oninput="this.value = this.value.toUpperCase()"
+                               required
+                               autofocus>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="number"
-                                   class="form-control"
-                                   name="inputKeyPlain"
-                                   placeholder="Input Key"
-                                   min="1"
-                                   max="25"
-                                   required>
-                        </div>
+                    <div class="mb-3">
+                        <label>Key:</label>
+                        <input type="number"
+                               class="form-control"
+                               name="inputKeyPlain"
+                               placeholder="Input Key (1-25)"
+                               min="1"
+                               max="25"
+                               step="1"
+                               required>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            Encrypt
-                        </button>
+                    <button type="submit" class="btn btn-primary">
+                        Encrypt
+                    </button>
 
-                    </form>
-                </td>
-            </tr>
+                </form>
+            </td>
+        </tr>
 
-            <tr>
-                <td class="section-title">
-                    DECRYPTION
-                </td>
-            </tr>
+        <!-- DECRYPT -->
+        <tr>
+            <td class="section-title">DECRYPTION</td>
+        </tr>
 
-            <tr>
-                <td>
-                    <form method="POST" action="/caesar/decrypt">
+        <tr>
+            <td>
+                <form method="POST" action="/caesar/decrypt">
 
-                        <div class="mb-3">
-                            <label class="form-label">Cipher text:</label>
-                            <input type="text"
-                                   class="form-control"
-                                   name="inputCipherText"
-                                   placeholder="Input Cipher Text"
-                                   pattern="[A-Za-z ]+"
-                                   title="Chỉ được nhập chữ cái và khoảng trắng"
-                                   required>
-                        </div>
+                    <div class="mb-3">
+                        <label>Cipher text:</label>
+                        <input type="text"
+                               class="form-control"
+                               name="inputCipherText"
+                               placeholder="Input Cipher Text"
+                               pattern="^[A-Za-z ]+$"
+                               title="Chỉ nhập chữ cái A-Z và khoảng trắng"
+                               oninput="this.value = this.value.toUpperCase()"
+                               required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Key:</label>
-                            <input type="number"
-                                   class="form-control"
-                                   name="inputKeyCipher"
-                                   placeholder="Input Key"
-                                   min="1"
-                                   max="25"
-                                   required>
-                        </div>
+                    <div class="mb-3">
+                        <label>Key:</label>
+                        <input type="number"
+                               class="form-control"
+                               name="inputKeyCipher"
+                               placeholder="Input Key (1-25)"
+                               min="1"
+                               max="25"
+                               step="1"
+                               required>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            Decrypt
-                        </button>
+                    <button type="submit" class="btn btn-primary">
+                        Decrypt
+                    </button>
 
-                    </form>
-                </td>
-            </tr>
+                </form>
+            </td>
+        </tr>
 
-        </table>
-    </div>
+    </table>
+</div>
 
 </body>
 </html>
