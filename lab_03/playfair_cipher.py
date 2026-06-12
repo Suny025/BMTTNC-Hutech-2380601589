@@ -1,12 +1,8 @@
 import sys
+import re
 import requests
 
-from PyQt5.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QMessageBox
-)
-
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from ui.playfair import Ui_MainWindow
 
 
@@ -17,44 +13,44 @@ class MyApp(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.ui.btn_encrypt.clicked.connect(
-            self.call_api_encrypt
-        )
+        self.ui.btn_encrypt.clicked.connect(self.call_api_encrypt)
+        self.ui.btn_decrypt.clicked.connect(self.call_api_decrypt)
 
-        self.ui.btn_decrypt.clicked.connect(
-            self.call_api_decrypt
-        )
+    # ================= VALIDATION =================
+    def validate(self, text, key):
+        text = text.strip().upper()
+        key = key.strip().upper()
 
-    def call_api_encrypt(self):
+        if not text:
+            return False, "Text không được để trống!"
 
-        plain_text = self.ui.txt_plain_text.toPlainText().strip()
-        key = self.ui.txt_key.text().strip()
-
-        # Validate Plain Text
-        if plain_text == "":
-            QMessageBox.warning(
-                self,
-                "Error",
-                "Plain Text không được để trống!"
-            )
-            return
-
-        # Validate Key
-        if key == "":
-            QMessageBox.warning(
-                self,
-                "Error",
-                "Key không được để trống!"
-            )
-            return
+        if not key:
+            return False, "Key không được để trống!"
 
         if not key.isalpha():
-            QMessageBox.warning(
-                self,
-                "Error",
-                "Key chỉ được chứa chữ cái A-Z!"
-            )
+            return False, "Key chỉ được chứa chữ cái A-Z!"
+
+        # chỉ chữ + space
+        if not re.fullmatch(r"[A-Z ]+", text):
+            return False, "Text chỉ được chứa chữ cái và khoảng trắng!"
+
+        return True, ""
+
+    # ================= ENCRYPT =================
+    def call_api_encrypt(self):
+
+        plain_text = self.ui.txt_plain_text.toPlainText()
+        key = self.ui.txt_key.text()
+
+        # validate
+        valid, msg = self.validate(plain_text, key)
+        if not valid:
+            QMessageBox.warning(self, "Error", msg)
             return
+
+        # normalize (QUAN TRỌNG PLAYFAIR)
+        plain_text = plain_text.upper().replace("J", "I").replace(" ", "")
+        key = key.upper().replace("J", "I")
 
         url = "http://127.0.0.1:5000/api/playfair/encrypt"
 
@@ -64,21 +60,14 @@ class MyApp(QMainWindow):
         }
 
         try:
-            response = requests.post(
-                url,
-                json=payload
-            )
+            response = requests.post(url, json=payload)
 
-            # ================== POWER SHELL LOG ==================
             print("\n=== ENCRYPT CLICKED ===")
-            print(f"Payload: {{'plain_text': '{plain_text}', 'key': '{key}'}}")
+            print(f"Payload: {payload}")
             print(f"Status: {response.status_code}")
-            print("Response:")
-            print(response.text)
-            # =====================================================
+            print("Response:", response.text)
 
             if response.status_code == 200:
-
                 data = response.json()
 
                 self.ui.txt_cipher_text.setPlainText(
@@ -90,7 +79,6 @@ class MyApp(QMainWindow):
                     "Success",
                     "Encrypted Successfully"
                 )
-
             else:
                 QMessageBox.warning(
                     self,
@@ -99,42 +87,23 @@ class MyApp(QMainWindow):
                 )
 
         except Exception as e:
-            QMessageBox.critical(
-                self,
-                "Error",
-                str(e)
-            )
+            QMessageBox.critical(self, "Error", str(e))
 
+    # ================= DECRYPT =================
     def call_api_decrypt(self):
 
-        cipher_text = self.ui.txt_cipher_text.toPlainText().strip()
-        key = self.ui.txt_key.text().strip()
+        cipher_text = self.ui.txt_cipher_text.toPlainText()
+        key = self.ui.txt_key.text()
 
-        # Validate Cipher Text
-        if cipher_text == "":
-            QMessageBox.warning(
-                self,
-                "Error",
-                "Cipher Text không được để trống!"
-            )
+        # validate
+        valid, msg = self.validate(cipher_text, key)
+        if not valid:
+            QMessageBox.warning(self, "Error", msg)
             return
 
-        # Validate Key
-        if key == "":
-            QMessageBox.warning(
-                self,
-                "Error",
-                "Key không được để trống!"
-            )
-            return
-
-        if not key.isalpha():
-            QMessageBox.warning(
-                self,
-                "Error",
-                "Key chỉ được chứa chữ cái A-Z!"
-            )
-            return
+        # normalize
+        cipher_text = cipher_text.upper().replace("J", "I").replace(" ", "")
+        key = key.upper().replace("J", "I")
 
         url = "http://127.0.0.1:5000/api/playfair/decrypt"
 
@@ -144,29 +113,18 @@ class MyApp(QMainWindow):
         }
 
         try:
-            response = requests.post(
-                url,
-                json=payload
-            )
+            response = requests.post(url, json=payload)
 
-            # ================== POWER SHELL LOG ==================
             print("\n=== DECRYPT CLICKED ===")
-            print(f"Payload: {{'cipher_text': '{cipher_text}', 'key': '{key}'}}")
+            print(f"Payload: {payload}")
             print(f"Status: {response.status_code}")
-            print("Response:")
-            print(response.text)
-            # =====================================================
+            print("Response:", response.text)
 
             if response.status_code == 200:
-
                 data = response.json()
 
-                decrypted_text = data.get(
-                    "decrypted_text",
-                    ""
-                )
+                decrypted_text = data.get("decrypted_text", "")
 
-                # API báo lỗi
                 if decrypted_text == "INVALID_CIPHER_TEXT":
                     QMessageBox.warning(
                         self,
@@ -175,16 +133,13 @@ class MyApp(QMainWindow):
                     )
                     return
 
-                self.ui.txt_plain_text.setPlainText(
-                    decrypted_text
-                )
+                self.ui.txt_plain_text.setPlainText(decrypted_text)
 
                 QMessageBox.information(
                     self,
                     "Success",
                     "Decrypted Successfully"
                 )
-
             else:
                 QMessageBox.warning(
                     self,
@@ -193,11 +148,7 @@ class MyApp(QMainWindow):
                 )
 
         except Exception as e:
-            QMessageBox.critical(
-                self,
-                "Error",
-                str(e)
-            )
+            QMessageBox.critical(self, "Error", str(e))
 
 
 if __name__ == "__main__":

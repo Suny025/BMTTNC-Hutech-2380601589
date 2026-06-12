@@ -14,12 +14,39 @@ class MyApp(QMainWindow):
         self.ui.btn_encrypt.clicked.connect(self.call_api_encrypt)
         self.ui.btn_decrypt.clicked.connect(self.call_api_decrypt)
 
+    # ================= VALIDATE KEY =================
+    def validate_key(self, key):
+        key = key.strip()
+
+        if not key:
+            return False, "Key không được để trống!"
+
+        if not key.isdigit():
+            return False, "Key phải là số!"
+
+        key_int = int(key)
+
+        if key_int <= 1:
+            return False, "Key phải lớn hơn 1!"
+
+        return True, ""
+
+    # ================= ENCRYPT =================
     def call_api_encrypt(self):
         url = "http://127.0.0.1:5000/api/railfence/encrypt"
 
+        plain_text = self.ui.txt_plain_text.toPlainText().strip()
+        key = self.ui.txt_key.text().strip()
+
+        # validate key
+        valid, msg = self.validate_key(key)
+        if not valid:
+            QMessageBox.warning(self, "Error", msg)
+            return
+
         payload = {
-            "plain_text": self.ui.txt_plain_text.toPlainText(),
-            "key": self.ui.txt_key.text()   # ✅ FIX Ở ĐÂY
+            "plain_text": plain_text,
+            "key": key
         }
 
         try:
@@ -56,12 +83,22 @@ class MyApp(QMainWindow):
                 str(e)
             )
 
+    # ================= DECRYPT =================
     def call_api_decrypt(self):
         url = "http://127.0.0.1:5000/api/railfence/decrypt"
 
+        cipher_text = self.ui.txt_cipher_text.toPlainText().strip()
+        key = self.ui.txt_key.text().strip()
+
+        # validate key
+        valid, msg = self.validate_key(key)
+        if not valid:
+            QMessageBox.warning(self, "Error", msg)
+            return
+
         payload = {
-            "cipher_text": self.ui.txt_cipher_text.toPlainText(),
-            "key": self.ui.txt_key.text()   # ✅ FIX Ở ĐÂY
+            "cipher_text": cipher_text,
+            "key": key
         }
 
         try:
